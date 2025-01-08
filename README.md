@@ -164,7 +164,7 @@ print("RMSE:", rmse)
 `LqSolver` uses a constant number of iterations (based on $\Delta q$) to approximate the $\(\ell_q\)$-norm solution:
 
 1. **Initialization**: Start from an initial guess $\(\mathbf{x}^{(0)}\)$ (typically least square solution).
-2. **Residuals**: Calculated residuals $A\mathbf{x}^{(i)}-b$
+2. **Residuals**: Calculated residuals $A\mathbf{x}^{(0)}-b$
 3. **Iterate**: (Repeat 4+5 for a preset number of iterations) 
 4. **Update**: Update the solution using $\overrightarrow{\Delta x}=\frac{\Delta q}{q_0-1}(A^TA)^{-1}A^T\log({\overrightarrow{r}})\overrightarrow{r}$.
 5. **Residuals**: Calculated residuals $A\mathbf{x}^{(i)}-b$
