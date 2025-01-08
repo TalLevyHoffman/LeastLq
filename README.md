@@ -1,13 +1,10 @@
-```markdown
 # LqSolver
 
-**LqSolver** is a Python class designed to solve the \(\ell_q\)-norm regression problem of the form:
+**LqSolver** is a Python class designed to solve the $\(\ell_q\)$-norm regression problem of the form:
 
-$$
-\min_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_{q},
-$$
+$$\min_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_{q}$$,
 
-where \(\|\cdot\|_q\) denotes the \(\ell_q\)-norm. The solver can handle different values of \(q\) (e.g., 1.1, 1.4, 1.7, etc.) to perform robust regression with respect to outliers and noise.
+where $\(\|\cdot\|_q)$ denotes the $\(\ell_q\)$-norm. The solver can handle different values of $\(q\)$ (e.g., 1.1, 1.4, 1.7, etc.) to perform robust regression with respect to outliers and noise.
 
 ## Table of Contents
 
@@ -24,11 +21,11 @@ where \(\|\cdot\|_q\) denotes the \(\ell_q\)-norm. The solver can handle differe
 
 ## Overview
 
-- **What is \(\ell_q\) regression?**  
-  \(\ell_q\) regression attempts to minimize the \(q\)-norm of residuals \(\|\mathbf{A}\mathbf{x} - \mathbf{b}\|_q\). This can be used to achieve robustness (for \(1 < q < 2\)) and to mitigate the effect of outliers in data.
+- **What is $\(\ell_q\)$ regression?**  
+  $\(\ell_q\)$ regression attempts to minimize the $\(q\)$-norm of residuals $\(\|\mathbf{A}\mathbf{x} - \mathbf{b}\|_q\)$. This can be used to achieve robustness (for \(1 < q < 2\)) and to mitigate the effect of outliers in data.
 
 - **Why use `LqSolver`?**  
-  `LqSolver` provides a straightforward API for setting up and solving \(\ell_q\)-norm regression problems. It allows you to experiment with different \(q\) values to observe how robust regression might behave compared to, say, standard least-squares (\(\ell_2\)-norm) or \(\ell_1\)-norm solutions.
+  `LqSolver` provides a straightforward API for setting up and solving $\(\ell_q\)$-norm regression problems. It allows you to experiment with different $\(q\)$ values to observe how robust regression might behave compared to, say, standard least-squares ($\(\ell_2\)$-norm) or $\(\ell_1\)$-norm solutions.
 
 ---
 
@@ -93,21 +90,20 @@ LqSolver(A, b)
   - `b` *(np.ndarray)*: The target/observation vector of shape `(n, 1)` or `(n,)`.
 
 - **Description**:  
-  Stores the matrix \(\mathbf{A}\) and vector \(\mathbf{b}\) internally for the \(\ell_q\) regression problem.
+  Stores the matrix $\(\mathbf{A}\)$ and vector $\(\mathbf{b}\)$ internally for the $\(\ell_q\)$ regression problem.
 
 ---
 
-### `LqSolver.Solve(q, max_iters=100, tol=1e-6, ...)`
+### `LqSolver.Solve(q, max_iters=100)`
 
 **Parameters**:
-- `q` *(float)*: The norm parameter \(q\). Typical values are in the range \((1, 2]\) or similar.  
+- `q` *(float)*: The norm parameter $\(q\)$. Typical values are in the range \((1, 2]\) or similar.  
 - `max_iters` *(int, optional)*: Maximum number of iterations (default is 100).  
-- `tol` *(float, optional)*: Tolerance for convergence (default is \(1\times10^{-6}\)).  
-- *(Additional parameters may exist depending on the implementation, such as step sizes, regularization terms, etc.)*
+- Additional parameters are included for the specific case of line fitting
 
 **Returns**:
-- `x` *(np.ndarray)*: The estimated \(\mathbf{x}\) that minimizes \(\|\mathbf{A}\mathbf{x} - \mathbf{b}\|_q\).  
-- `residual` *(float or np.ndarray, optional)*: The final residual norm or any relevant info about the solution.  
+- `x` *(np.ndarray)*: The estimated $\(\mathbf{x}\)$ that minimizes $\(\|\mathbf{A}\mathbf{x} - \mathbf{b}\|_q\)$.  
+- `xL2` *(np.ndarray)*: The least squares solution 
 - `info` *(dict, optional)*: A dictionary containing additional convergence information (iterations count, errors history, etc.).
 
 **Description**:
@@ -117,12 +113,10 @@ $$
 \min_{\mathbf{x}} \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_q,
 $$
 
-using an iterative approach (for example, Iteratively Reweighted Least Squares (IRLS)) or another specialized method for \(\ell_q\)-type cost functions.
-
 **Notes**:
 - If `q=2`, it reduces to a standard least-squares problem.
-- If `q=1`, it approximates an \(\ell_1\) (robust) regression.
-- For values of `q` between 1 and 2, the solution can offer a trade-off between the robustness of \(\ell_1\) and the computational efficiency of \(\ell_2\).
+- If `q=1`, it approximates an $\(\ell_1\)$ (robust) regression.
+- For values of `q` between 1 and 2, the solution can offer a trade-off between the robustness of $\(\ell_1\)$ and the computational efficiency and low variance of $\(\ell_2\)$.
 
 ---
 
@@ -167,14 +161,18 @@ print("RMSE:", rmse)
 
 ## Implementation Details
 
-`LqSolver` typically relies on an iterative algorithm (such as IRLS) to approximate the \(\ell_q\)-norm solution:
+`LqSolver` uses a constant number of iterations (based on $\Delta q$) to approximate the $\(\ell_q\)$-norm solution:
 
-1. **Initialization**: Start from an initial guess \(\mathbf{x}^{(0)}\).  
-2. **Reweighting**: At each iteration, reweight the residuals based on the current estimate \(\mathbf{x}^{(k)}\).  
-3. **Update**: Solve a weighted least-squares problem to get \(\mathbf{x}^{(k+1)}\).  
-4. **Convergence Check**: Stop if the change in \(\mathbf{x}^{(k)}\) or the change in the cost function is below `tol`, or if `max_iters` is reached.
+1. **Initialization**: Start from an initial guess $\(\mathbf{x}^{(0)}\)$ (typically least square solution).
+2. **Residuals**: Calculated residuals $A\mathbf{x}^{(i)}-b$
+3. **Iterate**: (Repeat 4+5 for a preset number of iterations) 
+4. **Update**: Update the solution using $\overrightarrow{\Delta x}=\frac{\Delta q}{q_0-1}(A^TA)^{-1}A^T\log({\overrightarrow{r}})\overrightarrow{r}$.
+5. **Residuals**: Calculated residuals $A\mathbf{x}^{(i)}-b$
 
-**Complexity**: Each iteration often involves solving a least-squares subproblem. The computational cost is roughly \(O(n \cdot p^2)\) or \(O(n^2 \cdot p)\), depending on your solver and the structure of \(\mathbf{A}\).
+**Complexity**: We can calculate $(A^TA)^{-1}A^T$ once at a computational cost of roughly $\(O(n^3)\)$,
+Each iteration is therefore of complexity $\(O(n^2)\)$ giving a total of $\(O(n^3)\)$.
+We may change the solver to use a simple linear solver for each step instead of precalculating $(A^TA)^{-1}A^T$,
+for better numerical stability.
 
 ---
 
