@@ -166,7 +166,7 @@ print("RMSE:", rmse)
 1. **Initialization**: Start from an initial guess $\(\mathbf{x}^{(0)}\)$ (typically least square solution).
 2. **Residuals**: Calculated residuals $A\mathbf{x}^{(0)}-b$
 3. **Iterate**: (Repeat 4+5 for a preset number of iterations) 
-4. **Update**: Update the solution using $\overrightarrow{\Delta x}=\frac{\Delta q}{q_0-1}(A^TA)^{-1}A^T\log({\overrightarrow{r}})\overrightarrow{r}$.
+4. **Update**: Update the solution using $\overrightarrow{\Delta x}=\frac{\Delta q}{q_0-1}(A^TA)^{-1}A^T\log(|{\overrightarrow{r}}|)\overrightarrow{r}$.
 5. **Residuals**: Calculated residuals $A\mathbf{x}^{(i)}-b$
 
 **Complexity**: We can calculate $(A^TA)^{-1}A^T$ once at a computational cost of roughly $\(O(n^3)\)$,
