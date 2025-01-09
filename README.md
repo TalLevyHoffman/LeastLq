@@ -31,10 +31,10 @@ where $\(\|\cdot\|_q)$ denotes the $\(\ell_q\)$-norm. The solver can handle diff
 
 ## Installation
 
-1. **Clone or download this repository** (if not already part of your codebase).
+1. **Clone or download this repository**
 2. **Install required dependencies** (e.g., NumPy). For example:
    ```bash
-   pip install numpy
+   pip install -r requirements.txt
    ```
 3. (Optional) If you want to integrate with your own environment, place the `LqSolver.py` file in your project directory or install it as a module using a local `setup.py`.
 
@@ -215,5 +215,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN  
 THE SOFTWARE.
-```
 ```
