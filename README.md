@@ -136,12 +136,12 @@ x_gt = np.random.randn(p, 1)
 b_gt = A @ x_gt
 
 # Add noise
-noise_level = 40
+noise_level = 20
 noise = noise_level * np.linalg.norm(b_gt) / n / 10
 b = b_gt + np.random.randn(n, 1) * noise
 
 # Introduce outliers
-outlier_ratio = 0.3
+outlier_ratio = 0.15
 num_outliers = int(np.round(n * outlier_ratio))
 indices = np.random.permutation(n)
 b[indices[:num_outliers]] = np.random.rand(num_outliers, 1) * 2
